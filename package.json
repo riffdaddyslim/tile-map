@@ -1,0 +1,29 @@
+{
+  "name": "tile-map",
+  "version": "1.0.0",
+  "description": "Library for creating interactive tile maps",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riffdaddyslim/tile-map.git"
+  },
+  "keywords": [
+    "tiled",
+    "tilemap",
+    "map",
+    "tile"
+  ],
+  "author": "Tyler Riffle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/riffdaddyslim/tile-map/issues"
+  },
+  "homepage": "https://github.com/riffdaddyslim/tile-map#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "nodemon": "^2.0.19"
+  }
+}
