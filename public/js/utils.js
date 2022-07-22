@@ -121,6 +121,7 @@ export function isCollisionPointRect(point, rect) {
 }
 
 export function getRGBA(hexAlpha) {
+    if (!hexAlpha) return
     const A = parseInt(hexAlpha.slice(1, 3), 16)
     const R = parseInt(hexAlpha.slice(3, 5), 16)
     const G = parseInt(hexAlpha.slice(5, 7), 16)
