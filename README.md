@@ -13,9 +13,13 @@ Library for rending a given tile map from the tiled editor
 - Animated text boxes that will utilize paths
 - Text boxes that can be linked to an object as the trigger ie. popups
 - Tooltips
+- Custom props to allow custimization
 
 # About
 This library is intended to be used on the client and have an API supply the json data for the rendering. Greate for tilemap games, or just creating an interactive web component easily with canvas and a grid system.
 
 # Usage
 Create a map in tiled with CSV enconding and export as a json with the tileset embedded. Then create a new TileMap(canvas_element, path_to_tileset, map_data)
+
+## Using properties
+TODO: Added start of linking custom properties. More features in progress, and need to create the docs once completed

@@ -5,6 +5,8 @@
  * @description This is the file for the TileMap class
  */
 
+import { PointTileObject, RectTileObject } from "./TileObjects.js"
+
 /**
  * @typedef MapObject JSON object exported from Tiled when saving a map in json format
  */
@@ -18,6 +20,7 @@ export default class TileMap {
     #context
     #tileset
     #currentMap
+    #poi = new Set()
 
     /**
      * 
@@ -87,13 +90,33 @@ export default class TileMap {
         })
     }
 
+    #getPOI(poi) {
+        if (poi.point) return new PointTileObject(poi)
+        return new RectTileObject(poi)
+    }
+
     /**
      * Function to draw all the layers in the current map
      */
     #drawLayers() {
         for (let layer of this.#currentMap.layers) {
-            layer.tiles = this.#make2dArray(layer)
-            this.#draw(layer)
+            switch (layer.type) {
+                case "objectgroup":
+                    for (let object of layer.objects) {
+                        this.#poi.add(this.#getPOI({
+                            ...object,
+                            layerProps: layer.properties
+                        }))
+                    }
+                    break
+                default:
+                    layer.tiles = this.#make2dArray(layer)
+                    this.#draw(layer)
+            }
+        }
+
+        for (let poi of this.#poi.values()) {
+            poi.update(this.#context)
         }
     }
 }
