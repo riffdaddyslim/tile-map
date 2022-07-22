@@ -54,7 +54,7 @@
          "name":"plots",
          "objects":[
                 {
-                 "class":"",
+                 "class":"lot",
                  "height":64,
                  "id":58,
                  "name":"Lot 1",
@@ -117,6 +117,11 @@
                          "name":"purchased",
                          "type":"bool",
                          "value":true
+                        }, 
+                        {
+                         "name":"taken",
+                         "type":"bool",
+                         "value":false
                         }],
                  "rotation":0,
                  "visible":true,
@@ -134,6 +139,11 @@
                          "name":"id",
                          "type":"string",
                          "value":"4"
+                        }, 
+                        {
+                         "name":"taken",
+                         "type":"bool",
+                         "value":true
                         }],
                  "rotation":0,
                  "visible":true,
@@ -225,6 +235,11 @@
                          "name":"color",
                          "type":"color",
                          "value":"#ff0000ff"
+                        }, 
+                        {
+                         "name":"labelOffsetY",
+                         "type":"int",
+                         "value":-20
                         }],
                  "rotation":0,
                  "visible":true,
@@ -235,6 +250,21 @@
          "opacity":1,
          "properties":[
                 {
+                 "name":"font",
+                 "type":"string",
+                 "value":"10px Verdana"
+                }, 
+                {
+                 "name":"fontColor",
+                 "type":"color",
+                 "value":"#ffffffff"
+                }, 
+                {
+                 "name":"labelOffsetY",
+                 "type":"int",
+                 "value":-15
+                }, 
+                {
                  "name":"purchased",
                  "type":"color",
                  "value":"#ff5555ff"
@@ -243,6 +273,16 @@
                  "name":"taken",
                  "type":"color",
                  "value":"#ffaa0000"
+                }, 
+                {
+                 "name":"textAlign",
+                 "type":"string",
+                 "value":"center"
+                }, 
+                {
+                 "name":"textPosition",
+                 "type":"string",
+                 "value":"center"
                 }],
          "type":"objectgroup",
          "visible":true,
@@ -250,7 +290,7 @@
          "y":0
         }],
  "nextlayerid":12,
- "nextobjectid":77,
+ "nextobjectid":78,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.0",

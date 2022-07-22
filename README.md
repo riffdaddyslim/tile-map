@@ -22,4 +22,12 @@ This library is intended to be used on the client and have an API supply the jso
 Create a map in tiled with CSV enconding and export as a json with the tileset embedded. Then create a new TileMap(canvas_element, path_to_tileset, map_data)
 
 ## Using properties
-TODO: Added start of linking custom properties. More features in progress, and need to create the docs once completed
+- Reference Props: When adding a prop that is dependent upon a bool at the tile level add the prefix ref_(prop name). This will make that prop only get used when the bool prop is true
+
+### Available Props
+- labelOffsetX: offset added to x coord when rendering a label
+- labelOffsetY: offset added to y coord when rendering a label
+- textPosition: (only supports center) determines the location to draw label from
+- font: accepts the same values 2d context of canvas supports
+- textAlign: accepts the same values 2d context of canvas supports
+- fontColor: Color of the label
