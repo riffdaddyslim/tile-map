@@ -124,6 +124,35 @@ export function isCollisionPointRect(point, rect) {
 }
 
 /**
+ * Function to determine if a point is within a given polygon
+ * @param {Point} point
+ * @param {Polygon} polygon
+ * @return {Boolean} If the point is within the given polygon
+ */
+export function isCollisionPointPolygon(point, polygon) {
+    // get minmax rect from polygon
+    const X_COORDS = polygon.map(point => point.x)
+    const Y_COORDS = polygon.map(point => point.y)
+
+    const X_MIN = Math.min(...X_COORDS)
+    const X_MAX = Math.max(...X_COORDS)
+
+    const Y_MIN = Math.min(...Y_COORDS)
+    const Y_MAX = Math.max(...Y_COORDS)
+
+    const RECT = {
+        x: X_MIN,
+        y: Y_MIN,
+        width: X_MAX - X_MIN,
+        height: Y_MAX - Y_MIN
+    }
+
+    return isCollisionPointRect(point, RECT)
+    // Check if point is between minmax rect
+    return false
+}
+
+/**
  * Function used to convert hexAlpha to rgba
  * @param {String} hexAlpha Hex Alpha color code string to get deciphered
  * @returns {String} RGBA color code string

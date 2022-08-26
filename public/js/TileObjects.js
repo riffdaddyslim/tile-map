@@ -1,4 +1,4 @@
-import { drawText, getRGBA } from "./utils.js"
+import { drawText, getRGBA, isCollisionPointPolygon, isCollisionPointRect } from "./utils.js"
 
 export class TileObject {
 
@@ -10,12 +10,13 @@ export class TileObject {
         textAlign: "center",
         fontColor: "white",
         fontBgColor: null,
-        padding: 0
+        padding: 0,
+        hoverFillStyle: null
     }
 
     constructor(poi) {
         for (let key of Object.keys(poi)) {
-            if (key === "class") this.className = poi["class"]
+            //if (key === "class") this.className = poi["class"]
             this[key] = poi[key]
         }
 
@@ -33,6 +34,7 @@ export class TileObject {
         }
 
         this.#loadPresetProps()
+        console.log(this)
     }
 
     getProp(name) {
@@ -77,9 +79,12 @@ export class TileObject {
         })
     }
 
-    update(context) {
+    isHovered() { return false }
+
+    update(context, mouse) {
         if (!this.visible) return
-        context.fillStyle = getRGBA(this.#presetProps.fillStyle)
+
+        context.fillStyle = getRGBA(this.isHovered(mouse) ? this.#presetProps.hoverFillStyle : this.#presetProps.fillStyle)
         context.strokeStyle = getRGBA(this.#presetProps.strokeStyle)
 
         context.lineWidth = this.#presetProps.lineWidth
@@ -90,13 +95,17 @@ export class TileObject {
         if (this.#presetProps.strokeStyle) context.stroke()
         context.closePath()
 
-        this.#drawLabel(context)
+        if (this.name) this.#drawLabel(context)
     }
 }
     
 export class RectTileObject extends TileObject {
     draw(context) {
         context.rect(this.x, this.y, this.width, this.height)
+    }
+
+    isHovered(mouse) {
+        return isCollisionPointRect(mouse, this)
     }
 }
 
@@ -114,12 +123,31 @@ export class PointTileObject extends TileObject {
 }
 
 export class PolygonTileObject extends TileObject {
+    constructor(poi) {
+        super(poi)
+        this.polygon = this.#translatePolygon()
+    }
+
+    #translatePolygon() {
+        const TRANSLATED_POLY = []
+        for (let pointIndex = 0; pointIndex <= this.polygon.length - 1; pointIndex++) {
+            TRANSLATED_POLY.push({
+                x: this.polygon[pointIndex].x + this.x,
+                y: this.polygon[pointIndex].y + this.y
+            })
+        }
+        return TRANSLATED_POLY
+    }
+
     draw(context) {
         context.moveTo(this.x, this.y)
-        for (let pointIndex = 1; pointIndex <= this.polygon.length - 1; pointIndex++) {
-            context.lineTo(this.polygon[pointIndex].x + this.x, this.polygon[pointIndex].y + this.y)
+        for (let pointIndex = 0; pointIndex <= this.polygon.length - 1; pointIndex++) {
+            context.lineTo(this.polygon[pointIndex].x, this.polygon[pointIndex].y)
         }
         context.lineTo(this.x, this.y)
- 
+    }
+
+    isHovered(mouse) {
+        return isCollisionPointPolygon(mouse, this.polygon)
     }
 }

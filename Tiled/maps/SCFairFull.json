@@ -79,10 +79,29 @@
                          "x":9,
                          "y":332.5
                         }],
+                 "properties":[
+                        {
+                         "name":"label",
+                         "propertytype":"label",
+                         "type":"class",
+                         "value":
+                            {
+
+                            }
+                        }, 
+                        {
+                         "name":"reserved_ref",
+                         "propertytype":"reference",
+                         "type":"class",
+                         "value":
+                            {
+                             "prop":"reserved"
+                            }
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":38.5,
+                 "x":37.1666666666666,
                  "y":83.5
                 }, 
                 {
@@ -116,11 +135,6 @@
                          "y":86.6666666666667
                         }],
                  "properties":[
-                        {
-                         "name":"ref_reserved_fillStyle",
-                         "type":"color",
-                         "value":"#32ff0004"
-                        }, 
                         {
                          "name":"reserved",
                          "type":"bool",
@@ -302,7 +316,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":7,
+ "nextobjectid":9,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.0",

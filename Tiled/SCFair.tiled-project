@@ -17,6 +17,16 @@
                     "value": "#32ffffff"
                 },
                 {
+                    "name": "hoverFillStyle",
+                    "type": "color",
+                    "value": "#64ffffff"
+                },
+                {
+                    "name": "ref_reserved_fillStyle",
+                    "type": "color",
+                    "value": "#ffb61010"
+                },
+                {
                     "name": "reserved",
                     "type": "bool",
                     "value": false
@@ -31,6 +41,50 @@
             "type": "class",
             "useAs": [
                 "object"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "id": 2,
+            "members": [
+            ],
+            "name": "label",
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "id": 4,
+            "members": [
+                {
+                    "name": "fillStyle",
+                    "type": "color",
+                    "value": ""
+                },
+                {
+                    "name": "label",
+                    "propertyType": "label",
+                    "type": "class",
+                    "value": {
+                    }
+                },
+                {
+                    "name": "prop",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "strokeStyle",
+                    "type": "color",
+                    "value": ""
+                }
+            ],
+            "name": "reference",
+            "type": "class",
+            "useAs": [
+                "property"
             ]
         }
     ]

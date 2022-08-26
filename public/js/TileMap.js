@@ -5,6 +5,7 @@
  * @description This is the file for the TileMap class
  */
 
+import { ImageLayer, TileLayer } from "./Layer.js"
 import { PointTileObject, PolygonTileObject, RectTileObject } from "./TileObjects.js"
 
 /**
@@ -21,9 +22,18 @@ export default class TileMap {
     #currentMap
     #basePath
     #poi = new Set()
+    #layers = []
 
     #classes
     #maps
+    #mouse = {
+        x: null,
+        y: null,
+        click: {
+            x: null,
+            y: null
+        }
+    }
 
     /**
      * 
@@ -41,7 +51,20 @@ export default class TileMap {
         this.#currentMap = this.#maps[0]
         this.#basePath = basePath
 
-        this.#drawLayers()
+        this.#linkEvents()
+        this.#getLayers()
+    }
+
+    #linkEvents() {
+        this.#canvas.addEventListener("mousemove", e => {
+            this.#mouse.x = e.offsetX
+            this.#mouse.y = e.offsetY
+        })
+
+        this.#canvas.addEventListener("click", e => {
+            this.#mouse.click.x = e.offsetX
+            this.#mouse.click.y = e.offsetY
+        })
     }
 
     #getImagePath(imagePath) {
@@ -70,56 +93,6 @@ export default class TileMap {
         // }
     }
 
-    /**
-     * Formats the layer data array into a 2D array
-     * @param {TileLayer} layer 
-     * @returns {Array[]} 2d array of the layer to make calculating the tile location easier
-     */
-    #make2dArray(layer) {
-        let arr_2d = []
-        for (let i = 0; i < layer.data.length; i += layer.width) {
-            arr_2d.push(layer.data.slice(i, i + layer.width))
-        }
-        return arr_2d
-    }
-
-    #getTileSet(tileIndex) {
-        return this.#currentMap.tilesets[0]
-    }
-
-    /**
-     * Function to get the coordinates for the given tile index from the tilemap
-     * @param {Number} tileIndex 
-     * @returns {[x,y]} Array of the x,y coords that the tile is referencing in the tilemap
-     */
-    #getTileCoords(tileIndex) {
-        let y = Math.floor(tileIndex / this.#getTileSet(tileIndex).columns)
-        let x = 0
-
-        if (tileIndex % this.#getTileSet(tileIndex).columns === 0) {
-            x = this.#getTileSet(tileIndex).columns - 1
-            y -= 1
-        }
-        else if (tileIndex > this.#getTileSet(tileIndex).columns) x = tileIndex % this.#getTileSet(tileIndex).columns - 1
-        else x = tileIndex - 1
-        
-        return [x * this.#currentMap.tilewidth, y * this.#currentMap.tileheight]
-    }
-    
-    /**
-     * Function to draw a given layer
-     * @param {TileLayer} layer The layer that will be drawn
-     */
-    #drawTileLayer(layer) {
-        layer.tiles.forEach((row, rowIndex) => {
-            row.forEach((tileIndex, columnIndex) => {
-                if (tileIndex === 0) return
-                const [ sx, sy ] = this.#getTileCoords(tileIndex)
-                this.#context.drawImage(this.#getTileSet(tileIndex).image, sx, sy, this.#currentMap.tilewidth, this.#currentMap.tileheight, columnIndex * this.#currentMap.tilewidth, rowIndex * this.#currentMap.tileheight, this.#currentMap.tilewidth, this.#currentMap.tileheight)
-            })
-        })
-    }
-
     #getPOI(poi) {
         if (poi.point) return new PointTileObject(poi)
         if (poi.polygon) return new PolygonTileObject(poi)
@@ -129,9 +102,9 @@ export default class TileMap {
     /**
      * Function to draw all the layers in the current map
      */
-    async #drawLayers() {
-            this.#canvas.width = this.#currentMap.width
-            this.#canvas.height = this.#currentMap.height
+    async #getLayers() {
+        this.#canvas.width = this.#currentMap.width
+        this.#canvas.height = this.#currentMap.height
         for (let layer of this.#currentMap.layers) {
             switch (layer.type) {
                 case "objectgroup":
@@ -145,16 +118,25 @@ export default class TileMap {
                     break
                 case "imagelayer":
                     const IMAGE = await this.#loadImage(layer.image)
-                    this.#context.drawImage(IMAGE, 0, 0)
+                    this.#layers.push(new ImageLayer(IMAGE))
                     break
                 default:
-                    layer.tiles = this.#make2dArray(layer)
-                    this.#drawTileLayer(layer)
+                    this.#layers.push(new TileLayer(layer, this.#currentMap))
             }
         }
 
-        for (let poi of this.#poi.values()) {
-            poi.update(this.#context)
-        }
+        this.animate()
+    }
+
+    animate() {
+        this.#layers.forEach(layer => {
+            layer.draw(this.#context)
+        })
+
+        this.#poi.forEach(poi => {
+            poi.update(this.#context, this.#mouse)
+        })
+
+        requestAnimationFrame(() => { this.animate() })
     }
 }

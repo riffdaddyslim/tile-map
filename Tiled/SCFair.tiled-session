@@ -36,7 +36,7 @@
         "maps/SCFairFull.json"
     ],
     "project": "SCFair.tiled-project",
-    "property.type": "bool",
+    "property.type": "reference",
     "recentFiles": [
         "maps/SCFairFull.json",
         "tilesets/FairGrounds.json"
