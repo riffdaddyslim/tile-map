@@ -1,111 +1,125 @@
 import { drawText, getRGBA } from "./utils.js"
 
 export class TileObject {
-    constructor({ id, name, properties, rotation, x, y, width, height, layerProps }) {
-        this.x = x
-        this.y = y
-        this.width = width
-        this.height = height
-        this.properties = properties
-        this.rotation = rotation
-        this.name = name
-        this.id = id
-        this.layerProps = layerProps
+
+    #presetProps = {
+        fillStyle: null,
+        strokeStyle: null,
+        lineWidth: 3,
+        font: "12px Verdana",
+        textAlign: "center",
+        fontColor: "white",
+        fontBgColor: null,
+        padding: 0
     }
 
-    #getProp(name) {
-        const LAYER_PROP = this.layerProps.find(prop => prop.name === name)
+    constructor(poi) {
+        for (let key of Object.keys(poi)) {
+            if (key === "class") this.className = poi["class"]
+            this[key] = poi[key]
+        }
 
-        const TILE_PROP = this.properties.find(prop => prop.name === `ref_${name}` || (prop.name === name && prop.type != "bool"))
+        this.label = {
+            offset: {
+                x: 0,
+                y: -25
+            },
+            color: "white",
+            bgColor: "rgba(0,0,0,0.6)",
+            padding: 10,
+            font: "12px Verdana",
+            textAlign: "center",
+            position: "center"
+        }
 
-        return TILE_PROP ?? LAYER_PROP ?? {}
+        this.#loadPresetProps()
     }
 
-    #handleBoolProp(prop, context) {
-        const PROP = this.#getProp(prop.name)
+    getProp(name) {
+        const CLASS_PROP = this.classProps ? this.classProps.find(prop => prop.name === name) : null
+        const LAYER_PROP = this.layerProps ? this.layerProps.find(prop => prop.name === name) : null
+        const TILE_PROP = this.properties ? this.properties.find(prop => prop.name === `ref_${name}` || (prop.name === name && prop.type != "bool")) : null
 
-        if (PROP?.type === "color") context.fillStyle = getRGBA(PROP.value)
+        return TILE_PROP ?? LAYER_PROP ?? CLASS_PROP ?? {}
+    }
+
+    #loadPresetProps() {
+        for (let presetProp of Object.keys(this.#presetProps)) {
+            const PROP = this.getProp(presetProp)
+            if (PROP.value) this.#presetProps[presetProp] = PROP.value
+        }
     }
 
     #getLabelLocation() {
-        const LOC = { x: this.x, y: this.y }
+        const LOC = {
+            x: this.x + this.label.offset.x - this.label.padding,
+            y: this.y + this.label.offset.y - this.label.padding
+        }
 
-        LOC.x += this.#getProp("labelOffsetX").value ?? 0
-        LOC.y += this.#getProp("labelOffsetY").value ?? 0
-
-        if (this.#getProp("textPosition").value === "center") {
+        if (this.label.position === "center") {
             LOC.x += this.width / 2
         }
 
         return LOC
     }
 
-    draw(context) {
-        context.font = this.#getProp("font").value ?? "12px Verdana"
-        context.textAlign = this.#getProp("textAlign").value ?? "center"
+    #drawLabel(context) {
+        context.font = this.label.font
 
         const LOC = this.#getLabelLocation()
         
         drawText(context, this.name, LOC.x, LOC.y, {
-            color: getRGBA(this.#getProp("fontColor").value) ?? "white",
-            padding: 0
+            color: this.label.color,
+            padding: this.label.padding,
+            bgColor: this.label.bgColor,
+            position: this.label.position,
+            textAlign: this.label.textAlign
         })
     }
 
     update(context) {
-        context.fillStyle = "rgba(0,0,0,0)"
-        for (let prop of this.properties) {
-            if (prop.name.includes("ref_")) continue
-            switch (prop.type) {
-                case "bool": 
-                    if (prop.value) this.#handleBoolProp(prop, context)
-                    break
-                case "color":
-                    context.fillStyle = getRGBA(prop.value)
-            }
-        }
+        if (!this.visible) return
+        context.fillStyle = getRGBA(this.#presetProps.fillStyle)
+        context.strokeStyle = getRGBA(this.#presetProps.strokeStyle)
+
+        context.lineWidth = this.#presetProps.lineWidth
         
+        context.beginPath()
         this.draw(context)
+        if (this.#presetProps.fillStyle) context.fill()
+        if (this.#presetProps.strokeStyle) context.stroke()
+        context.closePath()
+
+        this.#drawLabel(context)
     }
 }
     
 export class RectTileObject extends TileObject {
-    constructor({
-        height,
-        width,
-        x,
-        y,
-        id,
-        name,
-        properties,
-        rotation,
-        layerProps
-    }) {
-        super({ id, name, properties, rotation, x, y, width, height, layerProps })
-    }
-
     draw(context) {
-        context.fillRect(this.x, this.y, this.width, this.height)
-        super.draw(context)
+        context.rect(this.x, this.y, this.width, this.height)
     }
 }
 
 export class PointTileObject extends TileObject {
-    constructor({
-        x,
-        y,
-        id,
-        name,
-        properties,
-        layerProps
-    }) {
-        super({ id, name, properties, rotation: 0, x, y, width: 5, height: 5, layerProps })
+    constructor(poi) {
+        super(poi)
+
+        this.radius = this.getProp("radius").value
+        this.label.offset.y = this.label.offset.y - this.radius
     }
 
     draw(context) {
-        context.beginPath()
-        context.arc(this.x, this.y, 5, 0, Math.PI * 2)
-        context.fill()
-        super.draw(context)
+        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
+    }
+}
+
+export class PolygonTileObject extends TileObject {
+    draw(context) {
+        context.moveTo(this.x, this.y)
+        for (let pointIndex = 1; pointIndex <= this.polygon.length - 1; pointIndex++) {
+            context.lineTo(this.polygon[pointIndex].x + this.x, this.polygon[pointIndex].y + this.y)
+        }
+        context.lineTo(this.x, this.y)
+ 
     }
 }

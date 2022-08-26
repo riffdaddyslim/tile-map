@@ -53,9 +53,9 @@
  * @param {String} [position=left] position to render from - left or right
  * @returns 
  */
-export function drawText(context, text, x, y, { color = "black", bgColor = null, padding = 10, position = "left" } = {}) {
-    const { width, actualBoundingBoxAscent } = context.measureText(text)
-
+export function drawText(context, text, x, y, { color = "black", bgColor = null, padding = 0, position = "left", textAlign = "left" } = {}) {
+    let { width, actualBoundingBoxAscent } = context.measureText(text)
+    context.textAlign = textAlign
     switch (position) {
         case "right": x -= width + padding * 2
         default: 
@@ -64,8 +64,11 @@ export function drawText(context, text, x, y, { color = "black", bgColor = null,
     }
 
     if (bgColor) {
+        let xOffset = 0
+        if (textAlign === "center") xOffset -= width / 2
+
         context.fillStyle = bgColor
-        context.fillRect(x, y, width + padding * 2, actualBoundingBoxAscent + padding * 2)
+        context.fillRect(x + xOffset, y, width + padding * 2, actualBoundingBoxAscent + padding * 2)
     }
 
     context.fillStyle = color
@@ -120,11 +123,16 @@ export function isCollisionPointRect(point, rect) {
         point.y < rect.y + rect.height)
 }
 
+/**
+ * Function used to convert hexAlpha to rgba
+ * @param {String} hexAlpha Hex Alpha color code string to get deciphered
+ * @returns {String} RGBA color code string
+ */
 export function getRGBA(hexAlpha) {
     if (!hexAlpha) return
     const A = parseInt(hexAlpha.slice(1, 3), 16)
     const R = parseInt(hexAlpha.slice(3, 5), 16)
     const G = parseInt(hexAlpha.slice(5, 7), 16)
     const B = parseInt(hexAlpha.slice(7), 16)
-    return `rgba(${R}, ${G}, ${B}, ${A})`
+    return `rgba(${R}, ${G}, ${B}, ${A / 255})`
 }

@@ -9,7 +9,7 @@ fetch(`/map`)
     
 })
 
-async function getMap() {
+async function getData() {
     return new Promise((resolve, reject) => {
         fetch(`/map`)
         .then(res => {
@@ -21,4 +21,4 @@ async function getMap() {
     })
 }
 
-const TILE_MAP = new TileMap(CANVAS, "/images", await getMap())
+const TILE_MAP = new TileMap(CANVAS, "/images", await getData())

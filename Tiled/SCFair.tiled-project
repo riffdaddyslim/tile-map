@@ -1,0 +1,37 @@
+{
+    "automappingRulesFile": "",
+    "commands": [
+    ],
+    "extensionsPath": "extensions",
+    "folders": [
+        "."
+    ],
+    "propertyTypes": [
+        {
+            "color": "#ffa0a0a4",
+            "id": 1,
+            "members": [
+                {
+                    "name": "fillStyle",
+                    "type": "color",
+                    "value": "#32ffffff"
+                },
+                {
+                    "name": "reserved",
+                    "type": "bool",
+                    "value": false
+                },
+                {
+                    "name": "strokeStyle",
+                    "type": "color",
+                    "value": "#ff000000"
+                }
+            ],
+            "name": "MapSection",
+            "type": "class",
+            "useAs": [
+                "object"
+            ]
+        }
+    ]
+}

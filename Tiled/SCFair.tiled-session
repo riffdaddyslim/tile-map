@@ -1,0 +1,45 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "maps/SCFairFull.json",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "maps/SCFairFull.json": {
+            "scale": 0.75,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 518.6666666666666,
+                "y": 469.33333333333337
+            }
+        },
+        "tilesets/FairGrounds.json": {
+            "scaleInDock": 0.25,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/Tyler Riffle/Documents/Code Projects/tile-map/public/images",
+    "last.worldFilePath": "C:/Users/Tyler Riffle/Documents/Code Projects/tile-map/Tiled/worlds",
+    "loadedWorlds": [
+        "C:/Users/Tyler Riffle/Documents/Code Projects/tile-map/Tiled/worlds/SCFair.world"
+    ],
+    "map.height": 29,
+    "map.lastUsedFormat": "json",
+    "map.width": 33,
+    "openFiles": [
+        "maps/SCFairFull.json"
+    ],
+    "project": "SCFair.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "maps/SCFairFull.json",
+        "tilesets/FairGrounds.json"
+    ],
+    "tileset.lastUsedFormat": "json"
+}

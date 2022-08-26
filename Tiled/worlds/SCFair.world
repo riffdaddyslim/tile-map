@@ -1,0 +1,13 @@
+{
+    "maps": [
+        {
+            "fileName": "../maps/SCFairFull.json",
+            "height": 928,
+            "width": 1056,
+            "x": 0,
+            "y": 0
+        }
+    ],
+    "onlyShowAdjacentMaps": false,
+    "type": "world"
+}
