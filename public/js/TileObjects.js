@@ -16,7 +16,6 @@ export class TileObject {
 
     constructor(poi) {
         for (let key of Object.keys(poi)) {
-            //if (key === "class") this.className = poi["class"]
             this[key] = poi[key]
         }
 
@@ -34,7 +33,6 @@ export class TileObject {
         }
 
         this.#loadPresetProps()
-        console.log(this)
     }
 
     getProp(name) {
@@ -113,7 +111,7 @@ export class PointTileObject extends TileObject {
     constructor(poi) {
         super(poi)
 
-        this.radius = this.getProp("radius").value
+        this.radius = this.getProp("radius").value ?? 5
         this.label.offset.y = this.label.offset.y - this.radius
     }
 
